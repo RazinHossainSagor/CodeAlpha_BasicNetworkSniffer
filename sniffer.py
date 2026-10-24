@@ -1,7 +1,6 @@
 from scapy.all import sniff, IP, TCP, UDP, ICMP
 
 def packet_callback(packet):
-    # শুধুমাত্র আইপি (IP) লেয়ারের প্যাকেটগুলো ফিল্টার করা
     if IP in packet:
         src_ip = packet[IP].src
         dst_ip = packet[IP].dst
@@ -10,7 +9,6 @@ def packet_callback(packet):
         protocol_name = "Other"
         payload_preview = ""
 
-        # প্রোটোকল সনাক্তকরণ (TCP, UDP, ICMP ইত্যাদি)
         if packet.haslayer(TCP):
             protocol_name = "TCP"
             payload_preview = bytes(packet[TCP].payload)[:50]
@@ -23,7 +21,6 @@ def packet_callback(packet):
         else:
             protocol_name = f"Protocol-{protocol_num}"
 
-        # কনসোলে প্যাকেট সংক্রান্ত তথ্য প্রদর্শন
         print("-" * 65)
         print(f"[+] Traffic: {src_ip}  --->  {dst_ip} | Protocol: {protocol_name}")
         if payload_preview:
@@ -33,5 +30,4 @@ print("=" * 65)
 print("[*] Basic Network Sniffer is running... Capturing 10 packets...")
 print("=" * 65)
 
-# ১০টি প্যাকেট ক্যাপচার করার পর স্বয়ংক্রিয়ভাবে স্ক্রিপ্টটি সম্পন্ন হবে
 sniff(prn=packet_callback, count=10)
